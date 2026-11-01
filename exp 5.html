@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sweet Delights - Sign Up</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #fff8f3;
+    display: flex;
+    justify-content: center;
+    padding-top: 50px;
+  }
+  form {
+    background-color: #fff;
+    width: 350px;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  h2 { text-align: center; color: #d6336c; margin-top: 0; }
+  input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 12px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+  }
+  .error { color: red; font-size: 13px; display: block; min-height: 16px; }
+  button {
+    width: 100%;
+    margin-top: 15px;
+    padding: 12px;
+    background-color: #d6336c;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  button:hover { background-color: #a61e4d; }
+</style>
+</head>
+
+<body>
+
+<!-- index.html part: the sample form -->
+<form id="signupForm">
+  <h2>🎂 Sweet Delights - Sign up</h2>
+
+  <input id="name" placeholder="Name">
+  <span class="error" id="nameError"></span>
+
+  <input id="email" placeholder="Email">
+  <span class="error" id="emailError"></span>
+
+  <input id="password" type="password" placeholder="Password">
+  <span class="error" id="passError"></span>
+
+  <button type="submit">Sign up</button>
+</form>
+
+<!-- validate.js part -->
+<script>
+  var form          = document.getElementById("signupForm");
+  var nameInput     = document.getElementById("name");
+  var emailInput    = document.getElementById("email");
+  var passwordInput = document.getElementById("password");
+
+  // ---------- Reusable validators (return true / false) ----------
+  function isEmpty(value) {
+    return value.trim() === "";
+  }
+
+  function isValidEmail(email) {
+    var pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return pattern.test(email);
+  }
+
+  function isStrongPassword(pw) {
+    return pw.length >= 8;
+  }
+
+  // ---------- Show / clear error messages ----------
+  function showError(id, message) {
+    document.getElementById(id).textContent = message;
+  }
+
+  function clearErrors() {
+    document.getElementById("nameError").textContent  = "";
+    document.getElementById("emailError").textContent = "";
+    document.getElementById("passError").textContent  = "";
+  }
+
+  // ---------- Combine everything: validateForm() ----------
+  function validateForm() {
+    var valid = true;            // assume the form is valid
+    clearErrors();
+
+    // Name: if / else if
+    var name = nameInput.value.trim();
+    if (name === "") {
+      showError("nameError", "Name is required");
+      valid = false;
+    } else if (name.length < 3) {
+      showError("nameError", "Use at least 3 characters");
+      valid = false;
+    }
+
+    // Email
+    if (isEmpty(emailInput.value)) {
+      showError("emailError", "Email is required");
+      valid = false;
+    } else if (!isValidEmail(emailInput.value)) {
+      showError("emailError", "Enter a valid email");
+      valid = false;
+    }
+
+    // Password
+    if (isEmpty(passwordInput.value)) {
+      showError("passError", "Password is required");
+      valid = false;
+    } else if (!isStrongPassword(passwordInput.value)) {
+      showError("passError", "Minimum 8 characters");
+      valid = false;
+    }
+
+    return valid;                // true = submit, false = block
+  }
+
+  // ---------- Handle submit ----------
+  form.addEventListener("submit", function (e) {
+    if (!validateForm()) {
+      e.preventDefault();        // stay on page
+    } else {
+      e.preventDefault();        // remove this line if you have a server page to submit to
+      alert("Signup successful!");
+    }
+  });
+</script>
+
+</body>
+</html>
